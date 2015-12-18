@@ -9,6 +9,7 @@ const resolve = require('path').resolve;
 const assert = require('assert');
 const debug = require('debug')('koa-static');
 const send = require('koa-send');
+const co = require('co');
 
 /**
  * Expose `serve()`.
@@ -36,15 +37,15 @@ function serve(root, opts) {
   if (opts.index !== false) opts.index = opts.index || 'index.html';
 
   if (!opts.defer) {
-    return function *serve(ctx, next){
+    return co(function *serve(ctx, next){
       if (ctx.method == 'HEAD' || ctx.method == 'GET') {
         if (yield send(ctx, ctx.path, opts)) return;
       }
       yield* next;
-    };
+    });
   }
 
-  return function *serve(ctx, next){
+  return co(function *serve(ctx, next){
     yield* next;
 
     if (ctx.method != 'HEAD' && ctx.method != 'GET') return;
@@ -52,5 +53,5 @@ function serve(root, opts) {
     if (ctx.body != null || ctx.status != 404) return;
 
     yield send(ctx, ctx.path, opts);
-  };
+  });
 }
