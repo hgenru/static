@@ -41,7 +41,7 @@ function serve(root, opts) {
       if (ctx.method == 'HEAD' || ctx.method == 'GET') {
         if (yield send(ctx, ctx.path, opts)) return;
       }
-      yield next;
+      yield* next;
     });
   }
 
