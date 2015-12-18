@@ -41,12 +41,12 @@ function serve(root, opts) {
       if (ctx.method == 'HEAD' || ctx.method == 'GET') {
         if (yield send(ctx, ctx.path, opts)) return;
       }
-      yield* next;
+      yield next();
     });
   }
 
   return co.wrap(function *serve(ctx, next){
-    yield* next;
+    yield next();
 
     if (ctx.method != 'HEAD' && ctx.method != 'GET') return;
     // response is already handled
