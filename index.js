@@ -37,7 +37,7 @@ function serve(root, opts) {
   if (opts.index !== false) opts.index = opts.index || 'index.html';
 
   if (!opts.defer) {
-    return co(function *serve(ctx, next){
+    return co.wrap(function *serve(ctx, next){
       if (ctx.method == 'HEAD' || ctx.method == 'GET') {
         if (yield send(ctx, ctx.path, opts)) return;
       }
@@ -45,7 +45,7 @@ function serve(root, opts) {
     });
   }
 
-  return co(function *serve(ctx, next){
+  return co.wrap(function *serve(ctx, next){
     yield* next;
 
     if (ctx.method != 'HEAD' && ctx.method != 'GET') return;
