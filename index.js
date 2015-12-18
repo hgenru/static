@@ -36,9 +36,9 @@ function serve(root, opts) {
   if (opts.index !== false) opts.index = opts.index || 'index.html';
 
   if (!opts.defer) {
-    return function *serve(next){
-      if (this.method == 'HEAD' || this.method == 'GET') {
-        if (yield send(this, this.path, opts)) return;
+    return function *serve(ctx, next){
+      if (ctx.method == 'HEAD' || ctx.method == 'GET') {
+        if (yield send(ctx, ctx.path, opts)) return;
       }
       yield* next;
     };
