@@ -44,13 +44,13 @@ function serve(root, opts) {
     };
   }
 
-  return function *serve(next){
+  return function *serve(ctx, next){
     yield* next;
 
-    if (this.method != 'HEAD' && this.method != 'GET') return;
+    if (ctx.method != 'HEAD' && ctx.method != 'GET') return;
     // response is already handled
-    if (this.body != null || this.status != 404) return;
+    if (ctx.body != null || ctx.status != 404) return;
 
-    yield send(this, this.path, opts);
+    yield send(ctx, ctx.path, opts);
   };
 }
